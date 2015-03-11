@@ -75,3 +75,25 @@ obj-$(CONFIG_SPRD_TKS_DRIVER)   += sprd_tks.o
 obj-$(CONFIG_SDIODEV)     += sdiodev/
 obj-$(CONFIG_MDBG)  += mdbg/
 obj-y	+= sprd_dwnload/
+obj-$(CONFIG_APANIC_MMC)	+= apanic_mmc.o
+obj-$(CONFIG_TSIF) += msm_tsif.o
+obj-$(CONFIG_HAPTIC_ISA1200)		+= isa1200.o
+obj-$(CONFIG_QSEECOM) += qseecom.o
+ifdef CONFIG_COMPAT
+obj-$(CONFIG_QSEECOM) += compat_qseecom.o
+endif
+obj-$(CONFIG_SEC_DRIVER) += sec/
+obj-$(CONFIG_QFP_FUSE) += qfp_fuse.o
+obj-$(CONFIG_TI_DRV2667) += ti_drv2667.o
+obj-$(CONFIG_QPNP_MISC) += qpnp-misc.o
+obj-$(CONFIG_QCOM_LIQUID_DOCK)	+= qcom_liquid_dock.o
+obj-y				+= qcom/
+obj-$(CONFIG_ALSA_TO_H2W) += alsa-to-h2w-headset.o
+obj-$(CONFIG_MOT_UTAG) += utag/
+obj-$(CONFIG_MMI_FACTORY) += mmi-factory.o
+obj-$(CONFIG_DROPBOX) += dropbox.o
+obj-$(CONFIG_HOB_SHARED_RAM) += hob_ram_mmap.o
+obj-$(CONFIG_SENSORS_STML0XX) += stml0xx/
+obj-$(CONFIG_SENSORS_AK09912) += akm09912.o
+obj-$(CONFIG_HAPTIC_DRV2605)	+= drv2605.o
+obj-$(CONFIG_UID_CPUTIME) += uid_cputime.o
