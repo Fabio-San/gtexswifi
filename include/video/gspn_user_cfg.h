@@ -19,7 +19,7 @@ this file will share with user space
 
 #ifndef _GSPN_USER_CFG_H_
 #define _GSPN_USER_CFG_H_
-
+#include <linux/types.h>
 /*
 GSP ERR CODE 0x00-0xFF
 GSPN MODE1 HW ERR CODE 0x0100-0x01FF
@@ -106,6 +106,13 @@ typedef enum {
 	GSPN_LOG_INFO = 0x6,
 	GSPN_LOG_DEBUG = 0x7,
 	GSPN_LOG_PERF= 0x8,//performance
+    GSPN_LOG_INFO=0,
+    GSPN_LOG_DBG,
+    GSPN_LOG_WARN,
+    GSPN_LOG_ERROR,
+    GSPN_LOG_FATAL,
+    GSPN_LOG_PERF=7,//performance
+    GSPN_LOG_MAX,
 }
 GSPN_LOG_LEVEL_E;// echo to dev/sprd_gspn (1<<GSPN_LOG_xxx|1<<GSPN_LOG_xxx)
 
