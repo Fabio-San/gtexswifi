@@ -293,7 +293,7 @@ static void sprd_unplug_cpus(struct work_struct *work)
 	return;
 }
 
-static void sprd_plugin_cpus(struct work_struct *work)
+__cpuinit static void sprd_plugin_cpus(struct work_struct *work)
 {
 	int cpu, max_num;
 	int be_online_num = 0;
