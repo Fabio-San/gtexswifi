@@ -28,7 +28,8 @@ contains() { test "${1#*$2}" != "$1" && return 0 || return 1; }
 # dump boot and extract ramdisk
 dump_boot() {
   dd if=$block of=/tmp/anykernel/boot.img;
-  $bin/unpackbootimg -i /tmp/anykernel/boot.img -o $split_img;
+  mkdir $split_img;
+  $bin/unpackbootimg -i /tmp/anykernel/boot.img -o $split_img/;
   if [ $? != 0 ]; then
     ui_print " "; ui_print "Dumping/splitting image failed. Aborting..."; exit 1;
   fi;
@@ -46,20 +47,7 @@ dump_boot() {
 write_boot() {
   cd $split_img;
   cmdline=`cat *-cmdline`;
-  board=`cat *-board`;
-  base=`cat *-base`;
   pagesize=`cat *-pagesize`;
-  kerneloff=`cat *-kerneloff`;
-  ramdiskoff=`cat *-ramdiskoff`;
-  tagsoff=`cat *-tagsoff`;
-  osver=`cat *-osversion`;
-  oslvl=`cat *-oslevel`;
-  if [ -f *-second ]; then
-    second=`ls *-second`;
-    second="--second $split_img/$second";
-    secondoff=`cat *-secondoff`;
-    secondoff="--second_offset $secondoff";
-  fi;
   if [ -f /tmp/anykernel/zImage ]; then
     kernel=/tmp/anykernel/zImage;
   elif [ -f /tmp/anykernel/zImage-dtb ]; then
@@ -83,7 +71,7 @@ write_boot() {
   if [ $? != 0 ]; then
     ui_print " "; ui_print "Repacking ramdisk failed. Aborting..."; exit 1;
   fi;
-  $bin/mkbootimg --kernel $kernel --ramdisk /tmp/anykernel/ramdisk-new.cpio.gz $second --cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff $secondoff --tags_offset $tagsoff --os_version "$osver" --os_patch_level "$oslvl" $dtb --output /tmp/anykernel/boot-new.img;
+  $bin/mkbootimg --kernel $kernel --ramdisk /tmp/anykernel/ramdisk-new.cpio.gz --cmdline "$cmdline" --pagesize $pagesize $dtb --output /tmp/anykernel/boot-new.img;
   if [ $? != 0 ]; then
     ui_print " "; ui_print "Repacking image failed. Aborting..."; exit 1;
   elif [ `wc -c < /tmp/anykernel/boot-new.img` -gt `wc -c < /tmp/anykernel/boot.img` ]; then
@@ -95,7 +83,8 @@ write_boot() {
       ui_print " "; ui_print "User script execution failed. Aborting..."; exit 1;
     fi;
   fi;
-  dd if=/tmp/anykernel/boot-new.img of=$block;
+  cat /tmp/anykernel/dhtb.pad /tmp/anykernel/boot-new.img > /tmp/anykernel/boot.img
+  dd if=/tmp/anykernel/boot.img of=$block;
 }
 
 # backup_file <file>
