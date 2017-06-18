@@ -25,18 +25,20 @@ function build() {
 
     make -C ${RDIR} O=build ${makeopts} ${device_defconfig}
     make -C ${RDIR} O=build ${makeopts}
-    make -C ${RDIR} O=build ${makeopts} modules
-    make -C ${RDIR} O=build ${makeopts} dtbs
+    make -C ${RDIR}/build O=build ${makeopts} modules
+    make -C ${RDIR}/build O=build ${makeopts} dtbs
 
-    ./scripts/mkdtimg.sh -i ${RDIR}/arch/arm/boot/dts/ -o dtb
+    zip/dtbTool -p build/scripts/dtc/ -o zip/dtb build/arch/arm/boot/dts/
+
+    make -C external_module/wifi O=build KDIR=${RDIR}/build
+    make -C external_module/mali O=build MALI_PLATFORM=sc8830 BUILD=release KDIR=${RDIR}/build
     
     if [ -a ${zImagePath} ] ; then
         cp ${zImagePath} zip/zImage
-        cp arch/arm/boot/dtb zip/dtb
         mkdir -p zip/modules
         find -name '*.ko' -exec cp -av {} zip//modules/ \;
         cd zip
-        zip -q -r ${kernel}-${device}-${version}.zip anykernel.sh  META-INF tools zImage dtb modules
+        zip -q -r ${kernel}-${device}-${version}.zip anykernel.sh  META-INF tools zImage dtb dhtb.pad modules
     else
         echo -e "\n\e[31m***** Build Failed *****\e[0m\n"
     fi
