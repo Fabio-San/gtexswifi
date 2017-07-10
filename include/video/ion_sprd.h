@@ -81,7 +81,6 @@ struct ion_addr_data {
 	bool iova_enabled;
 	unsigned long iova_addr;
 	unsigned long phys_addr;
-	struct dma_buf *dmabuf;
 	size_t size;
 	struct dma_buf *dmabuf;
 	bool is_need_iova;
